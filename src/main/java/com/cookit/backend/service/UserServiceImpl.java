@@ -19,19 +19,16 @@ public class UserServiceImpl implements UserService {
         // JSON response
         Map<String, String> response = new HashMap<>();
 
-        User existingUser = userRepository.findByUsername(user.getUsername());
+        User existingUser = userRepository.findByUsernameCaseInsensitive(user.getUsername());
         if (existingUser != null) {
             response.put("error", "Username already exists");
-            return response;
-        }
-        existingUser = userRepository.findByEmail(user.getEmail());
-        if (existingUser != null) {
-            response.put("error", "Email already exists");
             return response;
         }
         // get current date
         Date currDate = Date.valueOf(LocalDate.now());
         user.setJoinDate(currDate);
+
+        // save user to the database
         userRepository.save(user);
         response.put("success", "User created successfully");
         return response;
