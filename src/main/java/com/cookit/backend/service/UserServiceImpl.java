@@ -1,6 +1,6 @@
 package com.cookit.backend.service;
 
-import com.cookit.backend.model.User;
+import com.cookit.backend.entity.User;
 import com.cookit.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
             return response;
         }
         // get current date
-        Date currDate = Date.valueOf(LocalDate.now());
+        LocalDate currDate = LocalDate.now();
         user.setJoinDate(currDate);
 
         // save user to the database

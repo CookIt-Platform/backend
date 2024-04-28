@@ -22,13 +22,13 @@ import lombok.Setter;
 public class Follows {
     @Id
     @ManyToOne
-    @Column(name = "follower", length = 256)
+    //@Column(name = "follower", length = 256)
     @JoinColumn(name = "follower", referencedColumnName = "username")
     private User follower;
 
     @Id
     @ManyToOne
-    @Column(name = "followee", length = 256)
+    //@Column(name = "followee", length = 256)
     @JoinColumn(name = "followee", referencedColumnName = "username")
     private User followee;
 }

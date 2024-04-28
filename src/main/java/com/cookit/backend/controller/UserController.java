@@ -1,6 +1,6 @@
 package com.cookit.backend.controller;
 
-import com.cookit.backend.model.User;
+import com.cookit.backend.entity.User;
 import com.cookit.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
