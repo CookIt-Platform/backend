@@ -5,8 +5,10 @@ import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -24,25 +26,27 @@ import lombok.Setter;
 @Table(name = "user")
 public class User {
     @Id
+    @Column(name = "username", length = 256)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 256)
     private String password;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "join_date", nullable = false, columnDefinition = "DATE")
     private LocalDate joinDate;
 
-    @Column(name = "bio")
+    @Column(name = "bio", length = 256)
     private String bio;
 
-    @Column(name = "profile_picture")
+    @Column(name = "profile_picture", length = 256)
     private String profilePicture;
 
-    @OneToMany(mappedBy = "follower")
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followers;
 
-    @OneToMany(mappedBy = "followee")
+    @OneToMany(mappedBy = "followee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Follows> followees;
+
 }
 

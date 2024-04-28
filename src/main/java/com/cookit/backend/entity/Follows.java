@@ -2,6 +2,7 @@ package com.cookit.backend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
@@ -21,14 +22,12 @@ import lombok.Setter;
 @IdClass(FollowsId.class)
 public class Follows {
     @Id
-    @ManyToOne
-    //@Column(name = "follower", length = 256)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower", referencedColumnName = "username")
     private User follower;
 
     @Id
-    @ManyToOne
-    //@Column(name = "followee", length = 256)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followee", referencedColumnName = "username")
     private User followee;
 }
