@@ -3,6 +3,7 @@
 package com.cookit.backend.entity;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -56,31 +57,31 @@ public class Post {
     private Difficulty difficulty;
 
     @Column(name = "time", nullable = false)
-    private int time;
+    private Integer time;
 
     @ManyToOne
     @JoinColumn(name = "author", referencedColumnName = "username", nullable = false/*, foreignKey = @ForeignKey(name = "FK_post_author")*/)
     private User author;
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Photo> photos;
+    private Set<Photo> photos = new HashSet<>();
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Rate> rates;
+    private Set<Rate> rates = new HashSet<>();
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<UserLikes> likes;
+    private Set<UserLikes> likes = new HashSet<>();
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Bookmark> bookmarks;
+    private Set<Bookmark> bookmarks = new HashSet<>();
     
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<HasTag> hasTags;
+    private Set<HasTag> hasTags = new HashSet<>();
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<ContainsIngredient> containsIngredients;
+    private Set<ContainsIngredient> containsIngredients = new HashSet<>();
     
 }

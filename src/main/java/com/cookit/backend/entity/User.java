@@ -1,6 +1,7 @@
 package com.cookit.backend.entity;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,24 +44,24 @@ public class User {
     private String profilePicture;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Follows> followers;
+    private Set<Follows> followers = new HashSet<>();
 
     @OneToMany(mappedBy = "followee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Follows> followees;
+    private Set<Follows> followees = new HashSet<>();
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Post> posts;
+    private Set<Post> posts = new HashSet<>();
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Rate> rates;
+    private Set<Rate> rates = new HashSet<>();
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<UserLikes> userLikes;
+    private Set<UserLikes> userLikes = new HashSet<>();
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Bookmark> bookmarks;
+    private Set<Bookmark> bookmarks = new HashSet<>();
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
 }
 

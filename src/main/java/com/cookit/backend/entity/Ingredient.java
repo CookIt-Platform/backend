@@ -1,5 +1,6 @@
 package com.cookit.backend.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -26,6 +27,6 @@ public class Ingredient {
     private String ingredientName;
 
     @OneToMany(mappedBy = "ingredientName", fetch = FetchType.LAZY)
-    private Set<ContainsIngredient> containsIngredients;
+    private Set<ContainsIngredient> containsIngredients = new HashSet<>();
 
 }
