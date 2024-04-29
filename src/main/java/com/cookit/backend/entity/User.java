@@ -42,11 +42,16 @@ public class User {
     @Column(name = "profile_picture", length = 256)
     private String profilePicture;
 
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Follows> followers;
 
-    @OneToMany(mappedBy = "followee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "followee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Follows> followees;
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Post> posts;
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Rate> rates;
 }
 

@@ -1,5 +1,6 @@
 package com.cookit.backend.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,12 +23,12 @@ import lombok.Setter;
 @IdClass(FollowsId.class)
 public class Follows {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "follower", referencedColumnName = "username")
     private User follower;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "followee", referencedColumnName = "username")
     private User followee;
 }

@@ -3,18 +3,32 @@
 package com.cookit.backend.entity;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "post")
 public class Post {
@@ -34,25 +48,23 @@ public class Post {
 
     @Column(name = "steps", length = 1000)
     private String steps;
-/*
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "difficulty", length = 5, 
+    @Column(name = "difficulty", 
             columnDefinition = "ENUM('easy', 'medium', 'hard')", 
             nullable = false)
-    private String difficulty;
-*/
-    @Column(name = "difficulty", length = 5, nullable = false)
-    private String difficulty;
+    private Difficulty difficulty;
 
     @Column(name = "time", nullable = false)
     private int time;
-/* 
+
     @ManyToOne
-    @JoinColumn(name = "user", referencedColumnName = "username", nullable = false, 
-                foreignKey = @ForeignKey(name = "FK_post_author"))
+    @JoinColumn(name = "author", referencedColumnName = "username", nullable = false/*, foreignKey = @ForeignKey(name = "FK_post_author")*/)
     private User author;
 
-    FOREIGN KEY(author) REFERENCES User(username) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT difficulty_range CHECK (difficulty = 'easy' OR difficulty = 'medium' OR difficulty = 'hard')
-*/
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Photo> photos;
+
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Rate> rates;
 }
