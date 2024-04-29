@@ -67,4 +67,20 @@ public class Post {
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Rate> rates;
+
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<UserLikes> likes;
+
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Bookmark> bookmarks;
+    
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<HasTag> hasTags;
+
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<ContainsIngredient> containsIngredients;
+    
 }

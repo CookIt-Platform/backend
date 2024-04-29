@@ -53,5 +53,14 @@ public class User {
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Rate> rates;
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<UserLikes> userLikes;
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Bookmark> bookmarks;
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<Comment> comments;
 }
 
