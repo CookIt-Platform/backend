@@ -49,7 +49,7 @@ public class User {
     @OneToMany(mappedBy = "followee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Follows> followees = new HashSet<>();
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE,orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Post> posts = new HashSet<>();
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
