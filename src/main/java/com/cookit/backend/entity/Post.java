@@ -63,7 +63,7 @@ public class Post {
     private Integer time;
 
     @ManyToOne
-    @JoinColumn(name = "author", referencedColumnName = "username", nullable = false, foreignKey = @ForeignKey(name = "FK_post_author"))
+    @JoinColumn(name = "author", referencedColumnName = "username", nullable = false, foreignKey = @ForeignKey(name = "FK_author_post"))
     private User author;
 
     @OneToMany(mappedBy = "postId", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)

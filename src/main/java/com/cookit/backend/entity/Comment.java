@@ -23,12 +23,12 @@ import lombok.Setter;
 public class Comment {
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "username", foreignKey = @ForeignKey(name = "FK_user"))
+    @JoinColumn(name = "user_id", referencedColumnName = "username", foreignKey = @ForeignKey(name = "FK_user_comment"))
     private User userId;
     
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_post_id"))
+    @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_post_id_comment"))
     private Post postId;
 
     @Id

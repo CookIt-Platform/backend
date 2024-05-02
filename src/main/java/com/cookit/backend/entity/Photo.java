@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Photo {
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_post_id"))
+    @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_post_id_photo"))
     private Post postId;
 
     @Id
