@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
@@ -26,12 +27,12 @@ public class ContainsIngredient {
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id", referencedColumnName = "Id")
+    @JoinColumn(name = "post_id", referencedColumnName = "Id", foreignKey = @ForeignKey(name = "FK_post_id"))
     private Post postId;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ingredient_name", referencedColumnName = "ingredient_name")
+    @JoinColumn(name = "ingredient_name", referencedColumnName = "ingredient_name", foreignKey = @ForeignKey(name = "FK_ingredient_name"))
     private Ingredient ingredientName;
 
     private double quantity;
