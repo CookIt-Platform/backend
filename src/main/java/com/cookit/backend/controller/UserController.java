@@ -32,6 +32,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest user) {
+        /*User userEntity = userService.loginUser(user);
+        if (userEntity != null) {
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUsername(user.getUsername());
+            return ResponseEntity.ok(userEntity);
+        }*/
         if (userService.loginUser(user) != null) {
             UserResponse userResponse = new UserResponse();
             userResponse.setUsername(user.getUsername());
