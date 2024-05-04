@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class IngredientDto {
     private String name;
-    private double quantity;
+    private Double quantity;
     private MeasurementUnit unit;
 /*
     public Ingredient convertDtoToIngredientEntity(IngredientDto ingredientDto){

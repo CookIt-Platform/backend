@@ -1,6 +1,8 @@
 package com.cookit.backend.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -8,6 +10,7 @@ import com.cookit.backend.dto.IngredientDto;
 import com.cookit.backend.dto.PostDto;
 import com.cookit.backend.entity.Comment;
 import com.cookit.backend.entity.ContainsIngredient;
+import com.cookit.backend.entity.ContainsIngredientId;
 import com.cookit.backend.entity.HasTag;
 import com.cookit.backend.entity.Ingredient;
 import com.cookit.backend.entity.Photo;
@@ -44,7 +47,7 @@ public class PostServiceImpl implements PostService{
     private CommentRepository commentRepository;
     private IngredientRepository ingredientRepository;
 
-    public PostServiceImpl(PostRepository postRepository, ContainsIngredientRepository containsIngredientRepository, HasTagRepository hasTagRepository, TagRepository tagRepository, PhotoRepository photoRepository, UserRepository userRepository, RateRepository rateRepository, UserLikesRepository likeRepository, BookmarkRepository bookmarkRepository, CommentRepository commentRepository) {
+    public PostServiceImpl(PostRepository postRepository, ContainsIngredientRepository containsIngredientRepository, HasTagRepository hasTagRepository, TagRepository tagRepository, PhotoRepository photoRepository, UserRepository userRepository, RateRepository rateRepository, UserLikesRepository likeRepository, BookmarkRepository bookmarkRepository, CommentRepository commentRepository, IngredientRepository ingredientRepository) {
         this.postRepository = postRepository;
         this.containsIngredientRepository = containsIngredientRepository;
         this.hasTagRepository = hasTagRepository;
@@ -58,7 +61,14 @@ public class PostServiceImpl implements PostService{
         this.ingredientRepository = ingredientRepository;
     }
 
-   // @Transactional
+    /**
+     * Creates a post from a postDto object
+     * It creates the post with the ingredients, the tags and the photos
+     * It also creates the ingredients, tags and photos if they don't exist
+     * @param postDto
+     * @return Post
+     */
+    @Transactional
     @Override
     public Post createPost(PostDto postDto) {
         User user = userRepository.findByUsernameCaseInsensitive(postDto.getAuthor());
@@ -75,15 +85,21 @@ public class PostServiceImpl implements PostService{
         user.getPosts().add(post);
         if(postDto.getIngredients() != null) {
             for(IngredientDto ingredientDto : postDto.getIngredients()) {
-                Ingredient ingredient = ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName());
+                Ingredient ingredient = ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName().toLowerCase());
                 if(ingredient == null) {
-                    ingredient = new Ingredient(ingredientDto.getName(), null);
+                    ingredient = new Ingredient();
+                    ingredient.setIngredientName(ingredientDto.getName().toLowerCase());
                     ingredientRepository.save(ingredient);
                 }
-                    ContainsIngredient containsIngredient = new ContainsIngredient(post, ingredient, ingredientDto.getQuantity(), ingredientDto.getUnit());
-                    containsIngredientRepository.save(containsIngredient);
-                    ingredient.getContainsIngredients().add(containsIngredient);
-                    post.getContainsIngredients().add(containsIngredient);   
+                  
+                    
+                    Optional<ContainsIngredient> existingContainsIngredient = containsIngredientRepository.findById(new ContainsIngredientId(post.getId(), ingredient.getIngredientName()));
+                    if(!existingContainsIngredient.isPresent()) {
+                        ContainsIngredient containsIngredient = new ContainsIngredient(post, ingredient, ingredientDto.getQuantity(), ingredientDto.getUnit());
+                        //containsIngredientRepository.save(containsIngredient);
+                        ingredient.getContainsIngredients().add(containsIngredient);
+                        post.getContainsIngredients().add(containsIngredient); 
+                    }
             }
         }
 
@@ -96,7 +112,7 @@ public class PostServiceImpl implements PostService{
                     tagRepository.save(tag);
                 }
                 HasTag hasTag = new HasTag(post, tag);
-                hasTagRepository.save(hasTag);
+                //hasTagRepository.save(hasTag);
                 post.getHasTags().add(hasTag);
                 tag.getHasTags().add(hasTag);
             }
@@ -105,43 +121,11 @@ public class PostServiceImpl implements PostService{
         if(postDto.getPhotos() != null) {
             for(String photo : postDto.getPhotos()) {
                 Photo photoEntity = new Photo(post, photo);
-                photoRepository.save(photoEntity);
+                //photoRepository.save(photoEntity);
                 post.getPhotos().add(photoEntity);
             }
         }
 
-        /*
-        for(IngredientDto ingredientDto : postDto.getIngredients()) {
-            Ingredient ingredient = ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName());
-            if(ingredient == null) {
-                ingredient = new Ingredient(ingredientDto.getName(), null);
-                ingredientRepository.save(ingredient);
-            }
-                ContainsIngredient containsIngredient = new ContainsIngredient(post, ingredient, ingredientDto.getQuantity(), ingredientDto.getUnit());
-                containsIngredientRepository.save(containsIngredient);
-                ingredient.getContainsIngredients().add(containsIngredient);
-                post.getContainsIngredients().add(containsIngredient);   
-        }
-
-        for(String tagName : postDto.getTags()) {
-            Tag tag = tagRepository.findByNameCaseInsensitive(tagName);
-            if(tag == null) {
-                tag = new Tag();
-                tag.setTagName(tagName);
-                tagRepository.save(tag);
-            }
-            HasTag hasTag = new HasTag(post, tag);
-            hasTagRepository.save(hasTag);
-            post.getHasTags().add(hasTag);
-            tag.getHasTags().add(hasTag);
-        }
-
-        for(String photo : postDto.getPhotos()) {
-            Photo photoEntity = new Photo(post, photo);
-            photoRepository.save(photoEntity);
-            post.getPhotos().add(photoEntity);
-        }
-*/
        return post;
     }
 
