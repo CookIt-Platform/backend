@@ -29,4 +29,20 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest user) {
+        if (userService.loginUser(user) != null) {
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUsername(user.getUsername());
+            return ResponseEntity.ok(userResponse);
+        }
+        else {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setError("UsernameOrPasswordDoNotMatch");
+            errorResponse.setMessage("Username or Password do not match or exist. Please try again.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
+
 }

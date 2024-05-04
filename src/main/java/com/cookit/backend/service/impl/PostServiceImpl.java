@@ -2,20 +2,25 @@ package com.cookit.backend.service.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.cookit.backend.entity.Ingredient;
 import com.cookit.backend.entity.Post;
 import com.cookit.backend.repository.PostRepository;
 import com.cookit.backend.service.PostService;
 
-/**
- * This class implements the PostService interface and provides the implementation for its methods.
- */
+@Service
 public class PostServiceImpl implements PostService{
 
     private PostRepository postRepository;
+
+    public PostServiceImpl(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
+
     @Override
     public void createPost(Post post) {
-       
+        
     }
 
     @Override
