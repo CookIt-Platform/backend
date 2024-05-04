@@ -3,6 +3,8 @@ package com.cookit.backend.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,6 +29,7 @@ public class Ingredient {
     private String ingredientName;
 
     @OneToMany(mappedBy = "ingredientName", fetch = FetchType.LAZY)
+    @JsonBackReference
     private Set<ContainsIngredient> containsIngredients = new HashSet<>();
 
 }

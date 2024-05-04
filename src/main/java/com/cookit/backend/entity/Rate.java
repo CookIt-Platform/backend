@@ -1,5 +1,7 @@
 package com.cookit.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,11 +27,13 @@ import lombok.Setter;
 public class Rate {
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference
     @JoinColumn(name = "user_id", referencedColumnName = "username")
     private User userId;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post postId;
 

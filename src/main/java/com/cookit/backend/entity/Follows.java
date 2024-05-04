@@ -1,5 +1,7 @@
 package com.cookit.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -23,11 +25,13 @@ import jakarta.persistence.ForeignKey;
 public class Follows {
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference
     @JoinColumn(name = "follower", referencedColumnName = "username", foreignKey = @ForeignKey(name = "FK_follower_follows"))
     private User follower;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference
     @JoinColumn(name = "followee", referencedColumnName = "username", foreignKey = @ForeignKey(name = "FK_followee_follows"))
     private User followee;
 }
