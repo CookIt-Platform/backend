@@ -45,12 +45,12 @@ public class RateServiceImpl implements RateService{
     }
 
     @Override
-    public Set<?> getAllRates(String username) {
+    public Set<Rate> getAllRates(String username) {
         return userRepository.findById(username).orElseThrow().getRates();
     }
 
     @Override
-    public Set<?> getAllRates(Long postId) {
+    public Set<Rate> getAllRates(Long postId) {
         return postRepository.findById(postId).orElseThrow().getRates();
     }
 }

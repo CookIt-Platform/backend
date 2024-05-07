@@ -10,4 +10,5 @@ public interface BookmarkService {
     public void deleteBookmark(BookmarkId bookmarkId);
     public void getBookmark(BookmarkId bookmarkId);
     public Set<?> getAllBookmarks(String username);
+    public Set<?> getAllBookmarks(Long postId);
 }

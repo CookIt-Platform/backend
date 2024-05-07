@@ -46,4 +46,11 @@ public class BookmarkServiceImpl implements BookmarkService{
     public Set<?> getAllBookmarks(String username) {
         return userRepository.findById(username).orElseThrow().getBookmarks();
     }
+
+    @Override
+    public Set<?> getAllBookmarks(Long postId) {
+        return postRepository.findById(postId).orElseThrow().getBookmarks();
+    }
+
+
 }
