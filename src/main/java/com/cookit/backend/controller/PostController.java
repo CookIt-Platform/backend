@@ -24,13 +24,16 @@ public class PostController {
     private final CommentService commentService;
     private final BookmarkService bookmarkService;
     private final RateService rateService;
+    private final PhotoService photoService;
     
-    public PostController(PostService postService, UserLikesService userLikesService, CommentService commentService, BookmarkService bookmarkService, RateService rateService) {
+    public PostController(PostService postService, UserLikesService userLikesService, CommentService commentService,
+                          BookmarkService bookmarkService, RateService rateService, PhotoService photoService) {
         this.postService = postService;
         this.userLikesService = userLikesService;
         this.commentService = commentService;
         this.bookmarkService = bookmarkService;
         this.rateService = rateService;
+        this.photoService = photoService;
     }
 
     @PostMapping("/create")
@@ -76,6 +79,7 @@ public class PostController {
         postResponse.setNumBookmarks(bookmarkService.getAllBookmarks(post.getId()).size());
         postResponse.setRates(rateService.getAllRates(post.getId()));
         postResponse.setAverageRating();
+        postResponse.setPhotos(photoService.getAllPhotos(post.getId()));
         return ResponseEntity.ok(postResponse);
     }
 

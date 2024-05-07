@@ -24,7 +24,7 @@ public class PostResponse {
     private String author;
 
     private Set<Rate> rates;
-    private Set<?> photos;
+    private Set<Photo> photos;
     private Set<?> likes;
     private Set<?> comments;
 
