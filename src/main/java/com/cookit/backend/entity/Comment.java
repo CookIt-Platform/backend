@@ -1,7 +1,12 @@
 package com.cookit.backend.entity;
 
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -28,14 +33,19 @@ public class Comment {
     @JsonManagedReference
     @JoinColumn(name = "user_id", referencedColumnName = "username", foreignKey = @ForeignKey(name = "FK_user_comment"))
     private User userId;
-    
+
     @Id
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "date", columnDefinition = "DATETIME")
+    private LocalDateTime date;
+    
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonManagedReference
     @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_post_id_comment"))
     private Post postId;
 
-    @Id
+    
     private String textualContent;
 
 }

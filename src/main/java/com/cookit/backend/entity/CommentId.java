@@ -1,6 +1,7 @@
 package com.cookit.backend.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommentId implements Serializable {
     private String userId;
-    private Long postId;
-    private String textualContent;
+    private LocalDateTime date;
 
 }
