@@ -6,50 +6,38 @@ import com.cookit.backend.repository.BookmarkRepository;
 import com.cookit.backend.repository.PostRepository;
 import com.cookit.backend.repository.UserRepository;
 import com.cookit.backend.service.BookmarkService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
 public class BookmarkServiceImpl implements BookmarkService{
-    private BookmarkRepository bookmarkRepository;
-    private PostRepository postRepository;
-    private UserRepository userRepository;
+    private final BookmarkRepository bookmarkRepository;
 
-    public BookmarkServiceImpl(BookmarkRepository bookmarkRepository, PostRepository postRepository, UserRepository userRepository) {
+    @Autowired
+    public BookmarkServiceImpl(BookmarkRepository bookmarkRepository) {
         this.bookmarkRepository = bookmarkRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     public void createBookmark(BookmarkDto bookmarkDto) {
-        Bookmark bookmark = new Bookmark();
-        User user = userRepository.findById(bookmarkDto.getUsername()).orElseThrow();
-        Post post = postRepository.findById(bookmarkDto.getPostId()).orElseThrow();
-        bookmark.setUserId(user);
-        bookmark.setPostId(post);
-        bookmarkRepository.save(bookmark);
+        bookmarkRepository.addBookmark(bookmarkDto.getUsername(), bookmarkDto.getPostId());
     }
 
     @Override
-    public void deleteBookmark(BookmarkId bookmarkId) {
-        bookmarkRepository.deleteById(bookmarkId);
+    public void deleteBookmark(BookmarkDto bookmarkDto) {
+        bookmarkRepository.removeBookmark(bookmarkDto.getUsername(), bookmarkDto.getPostId());
     }
 
     @Override
-    public void getBookmark(BookmarkId bookmarkId) {
-
+    public Set<Long> getAllPostsUserBookmarked(String username) {
+        return bookmarkRepository.findAllPostsUserBookmarked(username);
     }
 
     @Override
-    public Set<?> getAllBookmarks(String username) {
-        return userRepository.findById(username).orElseThrow().getBookmarks();
-    }
-
-    @Override
-    public Set<?> getAllBookmarks(Long postId) {
-        return postRepository.findById(postId).orElseThrow().getBookmarks();
+    public Long getNumBookmarks(Long postId) {
+        return bookmarkRepository.getNumOfBookmarks(postId);
     }
 
 

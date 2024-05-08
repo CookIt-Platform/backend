@@ -30,7 +30,7 @@ public class PostResponse {
 
     private Integer numLikes;
     private Integer numComments;
-    private Integer numBookmarks;
+    private Long numBookmarks;
     private Double averageRating;
 
     private Set<HasTag> hasTags;
