@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cookit.backend.dto.PostDto;
@@ -74,15 +75,21 @@ public class PostController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<?> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
-    }
+    public ResponseEntity<?> getPosts(@RequestParam(required = false) String username, @RequestParam(required = false) String difficulty) {
+        List<Post> posts;
 
-    @GetMapping("/get/all/{username}")
-    public ResponseEntity<?> getPostsByUser(@PathVariable String username) {
-        List<Post> posts = postService.getPostsByUser(username);
-        if(posts == null) {
-            return ResponseEntity.badRequest().body("No posts found for user " + username);
+        if (username != null && difficulty != null) {
+            posts = postService.getPostsByUserAndDifficulty(username, difficulty);
+        } else if (username != null) {
+            posts = postService.getPostsByUser(username);
+        } else if (difficulty != null) {
+            posts = postService.getPostsByDifficulty(difficulty);
+        } else {
+            posts = postService.getAllPosts();
+        }
+
+        if(posts == null || posts.isEmpty()) {
+            return ResponseEntity.badRequest().body("No posts found for the given criteria");
         }
 
         PostResponse[] postResponses = new PostResponse[posts.size()];

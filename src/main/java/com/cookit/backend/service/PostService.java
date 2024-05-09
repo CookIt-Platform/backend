@@ -13,6 +13,7 @@ public interface PostService {
     public Post getPost(Long id);
     public List<Post> getAllPosts();
     public List<Post> getPostsByDifficulty(String difficulty);
+    public List<Post> getPostsByUserAndDifficulty(String username, String difficulty);
     public List<Post> getPostsByTagList(List<String> tags);
     public List<Post> getPostsByTag(String tag);
     public List<Post> getPostsByUser(String username);

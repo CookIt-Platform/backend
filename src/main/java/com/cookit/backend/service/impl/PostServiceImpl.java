@@ -152,8 +152,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<Post> getPostsByDifficulty(String difficulty) {
-        // TODO Auto-generated method stub
-        return null;
+        
+        return postRepository.getPostsByDifficulty(difficulty);
     }
 
     @Override
@@ -189,6 +189,11 @@ public class PostServiceImpl implements PostService{
     public List<Post> getPostsByIngredientList(List<String> ingredients) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public List<Post> getPostsByUserAndDifficulty(String username, String difficulty) {
+        return postRepository.getPostsByDifficultyAndUser(difficulty, username);
     }
 
 }
