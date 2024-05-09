@@ -9,48 +9,46 @@ import com.cookit.backend.repository.PostRepository;
 import com.cookit.backend.repository.RateRepository;
 import com.cookit.backend.repository.UserRepository;
 import com.cookit.backend.service.RateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 @Service
 public class RateServiceImpl implements RateService{
     private RateRepository rateRepository;
-    private PostRepository postRepository;
-    private UserRepository userRepository;
-    public RateServiceImpl(RateRepository rateRepository, PostRepository postRepository, UserRepository userRepository) {
+
+    @Autowired
+    public RateServiceImpl(RateRepository rateRepository) {
         this.rateRepository = rateRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     public void createRate(RateDto rateDto) {
-        Rate rate = new Rate();
-        rate.setValue(rateDto.getValue());
-        User user = userRepository.findById(rateDto.getUsername()).orElseThrow();
-        Post post = postRepository.findById(rateDto.getPostId()).orElseThrow();
-        rate.setUserId(user);
-        rate.setPostId(post);
-        rateRepository.save(rate);
+        rateRepository.createRate(rateDto.getPostId(), rateDto.getUsername(), rateDto.getValue());
     }
 
     @Override
-    public void deleteRate(RateId rateId) {
-        rateRepository.deleteById(rateId);
+    public void deleteRate(RateDto rateDto) {
+        rateRepository.deleteRate(rateDto.getPostId(), rateDto.getUsername());
     }
 
     @Override
     public void updateRate(RateDto rateDto) {
-
+        rateRepository.updateRate(rateDto.getValue(), rateDto.getPostId(), rateDto.getUsername());
     }
 
     @Override
-    public Set<Rate> getAllRates(String username) {
-        return userRepository.findById(username).orElseThrow().getRates();
+    public Double getAverageRating(Long postID) {
+        return rateRepository.findPostAverageRating(postID);
     }
 
     @Override
-    public Set<Rate> getAllRates(Long postId) {
-        return postRepository.findById(postId).orElseThrow().getRates();
+    public Set<Rate> getAllUserRates(String username) {
+        return rateRepository.getAllUserRates(username);
+    }
+
+    @Override
+    public Set<Rate> getAllPostRates(Long postId) {
+        return rateRepository.getAllPostRates(postId);
     }
 }

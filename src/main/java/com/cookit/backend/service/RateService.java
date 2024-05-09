@@ -9,8 +9,9 @@ import java.util.Set;
 
 public interface RateService {
     public void createRate(RateDto rateDto);
-    public void deleteRate(RateId rateId);
+    public void deleteRate(RateDto rateDto);
     public void updateRate(RateDto rateDto);
-    public Set<Rate> getAllRates(String username);
-    public Set<Rate> getAllRates(Long postId);
+    public Set<Rate> getAllUserRates(String username);
+    public Set<Rate> getAllPostRates(Long postId);
+    public Double getAverageRating(Long postID);
 }
