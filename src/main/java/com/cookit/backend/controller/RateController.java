@@ -25,7 +25,7 @@ public class RateController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping ("/delete")
     public ResponseEntity<?> deleteRate(@RequestBody RateDto rateDto) {
         rateService.deleteRate(rateDto);
         return ResponseEntity.ok().build();
