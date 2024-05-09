@@ -141,7 +141,6 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Post getPost(Long id) {
-        // TODO Auto-generated method stub
         return postRepository.findById(id).orElse(null);
     }
 
@@ -171,8 +170,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<Post> getPostsByUser(String username) {
-        // TODO Auto-generated method stub
-        return null;
+        return postRepository.getUserPosts(username);
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.cookit.backend.controller;
 import com.cookit.backend.entity.User;
 import com.cookit.backend.response.PostResponse;
 import com.cookit.backend.service.*;
+
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -74,6 +76,20 @@ public class PostController {
     @GetMapping("/get/all")
     public ResponseEntity<?> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
+    }
+
+    @GetMapping("/get/all/{username}")
+    public ResponseEntity<?> getPostsByUser(@PathVariable String username) {
+        List<Post> posts = postService.getPostsByUser(username);
+        if(posts == null) {
+            return ResponseEntity.badRequest().body("No posts found for user " + username);
+        }
+
+        PostResponse[] postResponses = new PostResponse[posts.size()];
+        for(int i = 0; i < posts.size(); i++) {
+            postResponses[i] = createResponse(posts.get(i));
+        }
+        return ResponseEntity.ok(postResponses);
     }
 
 
