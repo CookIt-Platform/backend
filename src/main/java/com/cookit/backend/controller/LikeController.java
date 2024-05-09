@@ -27,7 +27,7 @@ public class LikeController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteLike(@PathVariable LikeDto likeDto) {
+    public ResponseEntity<?> deleteLike(@RequestBody LikeDto likeDto) {
         userLikesService.deleteLike(likeDto);
         return ResponseEntity.ok().build();
     }

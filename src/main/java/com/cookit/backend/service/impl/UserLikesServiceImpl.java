@@ -29,7 +29,7 @@ public class UserLikesServiceImpl implements UserLikesService{
 
     @Override
     public void deleteLike(LikeDto likeDto) {
-        userLikesRepository.deleteLike(likeDto.getUsername(), likeDto.getPostId());
+        userLikesRepository.deleteLike(likeDto.getPostId(), likeDto.getUsername());
     }
 
     @Override

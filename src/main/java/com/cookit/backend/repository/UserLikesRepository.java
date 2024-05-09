@@ -25,8 +25,8 @@ public interface UserLikesRepository extends JpaRepository<UserLikes, UserLikesI
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM user_likes l WHERE l.user_id = :username AND l.post_id = :postID)", nativeQuery = true)
-    void deleteLike(@Param("username") String username, @Param("postID") Long postID);
+    @Query(value = "DELETE FROM user_likes WHERE post_id = :postID AND user_id = :username", nativeQuery = true)
+    void deleteLike(@Param("postID") Long postID, @Param("username") String username);
 
     @Query(value = "SELECT l.user_id FROM user_likes l WHERE l.post_id = :postID", nativeQuery = true)
     Set<String> getPostLikes(@Param("postID") Long postID);
