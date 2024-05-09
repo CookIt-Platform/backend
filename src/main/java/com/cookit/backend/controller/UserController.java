@@ -1,5 +1,6 @@
 package com.cookit.backend.controller;
 
+import com.cookit.backend.dto.SignUpDto;
 import com.cookit.backend.entity.Rate;
 import com.cookit.backend.entity.User;
 import com.cookit.backend.response.ErrorResponse;
@@ -35,15 +36,15 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody User user) {
+    public ResponseEntity<?> signup(@RequestBody SignUpDto signUpDto) {
         try {
-            userService.registerUser(user);
-            User signedUpUser = userService.getUser(user.getUsername());
+            userService.registerUser(signUpDto);
+            User signedUpUser = userService.getUser(signUpDto.getUsername());
             return ResponseEntity.ok(createResponse(signedUpUser));
         } catch (IllegalStateException e) {
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setError("UsernameAlreadyTaken");
-            errorResponse.setMessage("Username '" + user.getUsername() + "' is already taken. Please choose a different username.");
+            errorResponse.setMessage("Username '" + signUpDto.getUsername() + "' is already taken. Please choose a different username.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }

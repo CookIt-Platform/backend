@@ -1,6 +1,7 @@
 package com.cookit.backend.service;
 
 import com.cookit.backend.controller.LoginRequest;
+import com.cookit.backend.dto.SignUpDto;
 import com.cookit.backend.entity.User;
 import com.cookit.backend.repository.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -26,13 +27,15 @@ public class UserService {
     }
 
     @Transactional
-    public void registerUser(User user) {
-        if (!usernameExists(user.getUsername())) {
+    public void registerUser(SignUpDto signUpDto) {
+        if (!usernameExists(signUpDto.getUsername())) {
             LocalDate currDate = LocalDate.now();
-            entityManager.createNativeQuery("INSERT INTO user (username, password, join_date) VALUES (?, ?, ?)")
-                    .setParameter(1, user.getUsername())
-                    .setParameter(2, user.getPassword())
-                    .setParameter(3, currDate)
+            entityManager.createNativeQuery("INSERT INTO user (username, bio, password, join_date, profile_picture) VALUES (?, ?, ?, ?, ?)")
+                    .setParameter(1, signUpDto.getUsername())
+                    .setParameter(2, signUpDto.getBio())
+                    .setParameter(3, signUpDto.getPassword())
+                    .setParameter(4, currDate)
+                    .setParameter(5, signUpDto.getProfilePicture())
                     .executeUpdate();
         }
         else {
