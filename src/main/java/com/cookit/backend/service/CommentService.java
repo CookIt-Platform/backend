@@ -12,7 +12,7 @@ public interface CommentService {
     public void deleteComment(CommentDto commentDto);
     public void updateComment(CommentDto commentDto);
     public void getComment(CommentId commentId);
-    public Set<Comment> getUserComments(String username);
-    public Set<Comment> getPostComments(Long postId);
+    public Set<CommentDto> getUserComments(String username);
+    public Set<CommentDto> getPostComments(Long postId);
     public Long getNumComments(Long postId);
 }

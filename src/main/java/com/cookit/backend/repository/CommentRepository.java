@@ -1,5 +1,6 @@
 package com.cookit.backend.repository;
 
+import com.cookit.backend.dto.CommentDto;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -43,5 +44,5 @@ public interface CommentRepository extends JpaRepository<Comment, CommentId> {
 
     @Query(value = "SELECT * FROM comment c WHERE c.user_id = :username AND c.textual_content = :textContent " +
             "AND c.post_id = :postID", nativeQuery = true)
-    Comment getComment(@Param("username") String username, @Param("textContent") String textContent, @Param("postID") Long postID);
+    CommentDto getComment(@Param("username") String username, @Param("textContent") String textContent, @Param("postID") Long postID);
 }

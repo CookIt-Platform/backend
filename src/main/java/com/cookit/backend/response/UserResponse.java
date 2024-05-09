@@ -1,5 +1,6 @@
 package com.cookit.backend.response;
 
+import com.cookit.backend.dto.CommentDto;
 import com.cookit.backend.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,5 @@ public class UserResponse {
     private Set<Post> posts;
     private Set<Long> likes;
     private Set<Long> bookmarks;
-    private Set<?> comments;
+    private Set<CommentDto> comments;
 }

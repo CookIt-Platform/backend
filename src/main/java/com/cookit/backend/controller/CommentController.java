@@ -33,12 +33,12 @@ public class CommentController {
     }
 
     @GetMapping("/get/all/post/{id}")
-    public Set<Comment> getPostComments(@PathVariable Long id) {
+    public Set<CommentDto> getPostComments(@PathVariable Long id) {
         return commentService.getPostComments(id);
     }
 
     @GetMapping("/get/all/user/{username}")
-    public Set<Comment> getComment(@PathVariable String username) {
+    public Set<CommentDto> getComment(@PathVariable String username) {
         return commentService.getUserComments(username);
     }
 

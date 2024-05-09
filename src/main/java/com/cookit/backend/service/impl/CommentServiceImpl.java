@@ -1,6 +1,7 @@
 package com.cookit.backend.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +52,25 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Set<Comment> getUserComments(String username) {
-        return commentRepository.findAllUserComments(username);
+    public Set<CommentDto> getUserComments(String username) {
+        Set<Comment> comments = commentRepository.findAllUserComments(username);
+        Set<CommentDto> commentDtos = new HashSet<>();
+        for (Comment c : comments) {
+            CommentDto commentDto = new CommentDto(c.getUserId().getUsername(), c.getPostId().getId(), c.getTextualContent(), c.getDate());
+            commentDtos.add(commentDto);
+        }
+        return commentDtos;
     }
 
     @Override
-    public Set<Comment> getPostComments(Long postId) {
-        return commentRepository.findAllPostComments(postId);
+    public Set<CommentDto> getPostComments(Long postId) {
+        Set<Comment> comments = commentRepository.findAllPostComments(postId);
+        Set<CommentDto> commentDtos = new HashSet<>();
+        for (Comment c : comments) {
+            CommentDto commentDto = new CommentDto(c.getUserId().getUsername(), c.getPostId().getId(), c.getTextualContent(), c.getDate());
+            commentDtos.add(commentDto);
+        }
+        return commentDtos;
     }
 
 }
