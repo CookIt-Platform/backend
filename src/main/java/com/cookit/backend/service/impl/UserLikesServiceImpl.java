@@ -9,6 +9,7 @@ import com.cookit.backend.repository.PostRepository;
 import com.cookit.backend.repository.UserLikesRepository;
 import com.cookit.backend.repository.UserRepository;
 import com.cookit.backend.service.UserLikesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -16,36 +17,33 @@ import java.util.Set;
 @Service
 public class UserLikesServiceImpl implements UserLikesService{
     private UserLikesRepository userLikesRepository;
-    private PostRepository postRepository;
-    private UserRepository userRepository;
 
-    public UserLikesServiceImpl(UserLikesRepository userLikesRepository, PostRepository postRepository, UserRepository userRepository) {
+    @Autowired
+    public UserLikesServiceImpl(UserLikesRepository userLikesRepository) {
         this.userLikesRepository = userLikesRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
     @Override
     public void createLike(LikeDto likeDto) {
-        UserLikes userLikes = new UserLikes();
-        User user = userRepository.findById(likeDto.getUsername()).orElseThrow();
-        Post post = postRepository.findById(likeDto.getPostId()).orElseThrow();
-        userLikes.setUserId(user);
-        userLikes.setPostId(post);
-        userLikesRepository.save(userLikes);
+        userLikesRepository.createLike(likeDto.getUsername(), likeDto.getPostId());
     }
 
     @Override
-    public void deleteLike(UserLikesId userLikesId) {
-        userLikesRepository.deleteById(userLikesId);
+    public void deleteLike(LikeDto likeDto) {
+        userLikesRepository.deleteLike(likeDto.getUsername(), likeDto.getPostId());
     }
 
     @Override
-    public Set<?> getAllLikes(String username) {
-        return userRepository.findById(username).orElseThrow().getUserLikes();
+    public Set<UserLikes> getAllLikes(String username) {
+        return userLikesRepository.getUserLikes(username);
     }
 
     @Override
-    public Set<?> getAllLikes(Long postId) {
-        return postRepository.findById(postId).orElseThrow().getLikes();
+    public Set<UserLikes> getPostLikes(Long postId) {
+        return userLikesRepository.getPostLikes(postId);
+    }
+
+    @Override
+    public Long getNumLikes(Long postId) {
+        return userLikesRepository.getNumLikes(postId);
     }
 }

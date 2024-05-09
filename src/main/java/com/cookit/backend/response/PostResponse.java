@@ -25,22 +25,14 @@ public class PostResponse {
 
     private Set<Rate> rates;
     private Set<Photo> photos;
-    private Set<?> likes;
+    private Set<UserLikes> likes;
     private Set<?> comments;
 
-    private Integer numLikes;
+    private Long numLikes;
     private Integer numComments;
     private Long numBookmarks;
     private Double averageRating;
 
     private Set<HasTag> hasTags;
     private Set<ContainsIngredient> containsIngredients;
-
-    public void setAverageRating() {
-        int sum = 0;
-        for (Rate r: rates) {
-            sum += r.getValue();
-        }
-        this.averageRating = (double) sum / rates.size();
-    }
 }

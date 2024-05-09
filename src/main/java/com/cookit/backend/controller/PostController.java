@@ -72,13 +72,12 @@ public class PostController {
         postResponse.setDifficulty(post.getDifficulty());
         postResponse.setTime(post.getTime());
         postResponse.setAuthor(post.getAuthor().getUsername());
-        postResponse.setLikes(userLikesService.getAllLikes(post.getId()));
+        postResponse.setLikes(userLikesService.getPostLikes(post.getId()));
         postResponse.setComments(commentService.getAllComments(post.getId()));
-        postResponse.setNumLikes(postResponse.getLikes().size());
+        postResponse.setNumLikes(userLikesService.getNumLikes(post.getId()));
         postResponse.setNumComments(postResponse.getComments().size());
         postResponse.setNumBookmarks(bookmarkService.getNumBookmarks(post.getId()));
         postResponse.setRates(rateService.getAllRates(post.getId()));
-        postResponse.setAverageRating();
         postResponse.setPhotos(photoService.getAllPhotos(post.getId()));
         return ResponseEntity.ok(postResponse);
     }
