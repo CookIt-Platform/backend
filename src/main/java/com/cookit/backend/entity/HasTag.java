@@ -25,13 +25,13 @@ import lombok.Setter;
 public class HasTag {
     
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_post_id_has_tag"))
     private Post postId;
     
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     @JoinColumn(name = "tag_name", referencedColumnName = "tag_name", foreignKey = @ForeignKey(name = "FK_tag_name_has_tag"))
     private Tag tagName;

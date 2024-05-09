@@ -24,13 +24,13 @@ import jakarta.persistence.ForeignKey;
 @IdClass(FollowsId.class)
 public class Follows {
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     @JoinColumn(name = "follower", referencedColumnName = "username", foreignKey = @ForeignKey(name = "FK_follower_follows"))
     private User follower;
 
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     @JoinColumn(name = "followee", referencedColumnName = "username", foreignKey = @ForeignKey(name = "FK_followee_follows"))
     private User followee;
