@@ -26,13 +26,13 @@ public class PostResponse {
     private Set<Rate> rates;
     private Set<String> photos;
     private Set<UserLikes> likes;
-    private Set<?> comments;
+    private Set<Comment> comments;
 
     private Long numLikes;
-    private Integer numComments;
+    private Long numComments;
     private Long numBookmarks;
     private Double averageRating;
 
-    private Set<HasTag> hasTags;
+    private Set<String> hasTags;
     private Set<ContainsIngredient> containsIngredients;
 }

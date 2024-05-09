@@ -24,7 +24,7 @@ import lombok.Setter;
 @IdClass(PhotoId.class)
 public class Photo {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonManagedReference
     @JoinColumn(name = "post_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_post_id_photo"))
     private Post postId;

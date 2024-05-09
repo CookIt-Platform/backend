@@ -1,7 +1,9 @@
 package com.cookit.backend.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cookit.backend.dto.CommentDto;
@@ -17,31 +19,22 @@ import com.cookit.backend.service.CommentService;
 @Service
 public class CommentServiceImpl implements CommentService{
 
-    private CommentRepository commentRepository;
-    private PostRepository postRepository;
-    private UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository) {
+    @Autowired
+    public CommentServiceImpl(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     public void createComment(CommentDto commentDto) {
-        Comment comment = new Comment();
-        comment.setTextualContent(commentDto.getTextualContent());
-        comment.setDate(commentDto.getDate());
-        User user = userRepository.findById(commentDto.getUserId()).orElseThrow();
-        Post post = postRepository.findById(commentDto.getPostId()).orElseThrow();
-        comment.setUserId(user);
-        comment.setPostId(post);
-        commentRepository.save(comment);
+        // LocalDateTime date = LocalDateTime.now();
+        commentRepository.createComment(commentDto.getDate(), commentDto.getUserId(), commentDto.getTextualContent(), commentDto.getPostId());
     }
 
     @Override
-    public void deleteComment(CommentId commentId) {
-        commentRepository.deleteById(commentId);
+    public void deleteComment(CommentDto commentDto) {
+        commentRepository.deleteComment(commentDto.getUserId(), commentDto.getTextualContent(), commentDto.getPostId());
     }
 
     @Override
@@ -53,13 +46,18 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Set<?> getAllComments(String username) {
-        return userRepository.findById(username).orElseThrow().getComments();
+    public Long getNumComments(Long postId) {
+        return commentRepository.getNumOfComments(postId);
     }
 
     @Override
-    public Set<?> getAllComments(Long postId) {
-        return postRepository.findById(postId).orElseThrow().getComments();
+    public Set<Comment> getUserComments(String username) {
+        return commentRepository.findAllUserComments(username);
+    }
+
+    @Override
+    public Set<Comment> getPostComments(Long postId) {
+        return commentRepository.findAllPostComments(postId);
     }
 
 }

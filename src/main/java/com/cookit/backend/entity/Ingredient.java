@@ -28,7 +28,7 @@ public class Ingredient {
     @Column(name = "ingredient_name", length = 256)
     private String ingredientName;
 
-    @OneToMany(mappedBy = "ingredientName", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ingredientName", fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<ContainsIngredient> containsIngredients = new HashSet<>();
 

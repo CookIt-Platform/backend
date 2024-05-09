@@ -86,12 +86,12 @@ public class UserController {
         userResponse.setProfilePicture(user.getProfilePicture());
         userResponse.setNumFollowers(followsService.getNumFollowers(user.getUsername()));
         userResponse.setNumFollowing(followsService.getNumFollowing(user.getUsername()));
-        userResponse.setNumFollowers(followsService.getNumFollowers(user.getUsername()));
-        userResponse.setNumFollowing(followsService.getNumFollowing(user.getUsername()));
+        userResponse.setFollowers(followsService.getFollowers(user.getUsername()));
+        userResponse.setFollowing(followsService.getFollowing(user.getUsername()));
         userResponse.setRates(rateService.getAllUserRates(user.getUsername()));
         userResponse.setLikes(userLikesService.getAllLikes(user.getUsername()));
         userResponse.setBookmarks(bookmarkService.getAllPostsUserBookmarked(user.getUsername()));
-        userResponse.setComments(commentService.getAllComments(user.getUsername()));
+        userResponse.setComments(commentService.getUserComments(user.getUsername()));
         return userResponse;
     }
 }

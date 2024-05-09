@@ -3,6 +3,7 @@ package com.cookit.backend.controller;
 import com.cookit.backend.entity.User;
 import com.cookit.backend.response.PostResponse;
 import com.cookit.backend.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,15 +26,19 @@ public class PostController {
     private final BookmarkService bookmarkService;
     private final RateService rateService;
     private final PhotoService photoService;
-    
+    private final HasTagService hasTagService;
+
+    @Autowired
     public PostController(PostService postService, UserLikesService userLikesService, CommentService commentService,
-                          BookmarkService bookmarkService, RateService rateService, PhotoService photoService) {
+                          BookmarkService bookmarkService, RateService rateService, PhotoService photoService,
+                          HasTagService hasTagService) {
         this.postService = postService;
         this.userLikesService = userLikesService;
         this.commentService = commentService;
         this.bookmarkService = bookmarkService;
         this.rateService = rateService;
         this.photoService = photoService;
+        this.hasTagService = hasTagService;
     }
 
     @PostMapping("/create")
@@ -63,6 +68,16 @@ public class PostController {
         if(post == null) {
             return ResponseEntity.badRequest().body("Post not found");
         }
+        return ResponseEntity.ok(createResponse(post));
+    }
+
+    @GetMapping("/get/all")
+    public ResponseEntity<?> getAllPosts() {
+        return ResponseEntity.ok(postService.getAllPosts());
+    }
+
+
+    public PostResponse createResponse(Post post) {
         PostResponse postResponse = new PostResponse();
         postResponse.setId(post.getId());
         postResponse.setName(post.getName());
@@ -73,20 +88,14 @@ public class PostController {
         postResponse.setTime(post.getTime());
         postResponse.setAuthor(post.getAuthor().getUsername());
         postResponse.setLikes(userLikesService.getPostLikes(post.getId()));
-        postResponse.setComments(commentService.getAllComments(post.getId()));
+        postResponse.setComments(commentService.getPostComments(post.getId()));
         postResponse.setNumLikes(userLikesService.getNumLikes(post.getId()));
-        postResponse.setNumComments(postResponse.getComments().size());
+        postResponse.setNumComments(commentService.getNumComments(post.getId()));
         postResponse.setNumBookmarks(bookmarkService.getNumBookmarks(post.getId()));
         postResponse.setRates(rateService.getAllPostRates(post.getId()));
         postResponse.setAverageRating(rateService.getAverageRating(post.getId()));
         postResponse.setPhotos(photoService.getAllPhotos(post.getId()));
-        return ResponseEntity.ok(postResponse);
+        postResponse.setHasTags(hasTagService.getTagsOfPost(post.getId()));
+        return postResponse;
     }
-
-    @GetMapping("/get/all")
-    public ResponseEntity<?> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
-    }
-
-
 }

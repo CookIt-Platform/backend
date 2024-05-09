@@ -29,7 +29,7 @@ public class Tag {
     @Column(name = "tag_name", length = 256, nullable = false)
     private String tagName;
 
-    @OneToMany(mappedBy = "tagName", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tagName", fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<HasTag> hasTags = new HashSet<>();
 }

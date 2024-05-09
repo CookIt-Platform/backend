@@ -26,7 +26,7 @@ import lombok.Setter;
 @IdClass(RateId.class)
 public class Rate {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonManagedReference
     @JoinColumn(name = "user_id", referencedColumnName = "username")
     private User userId;
