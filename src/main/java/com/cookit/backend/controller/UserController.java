@@ -1,9 +1,10 @@
 package com.cookit.backend.controller;
 
+import com.cookit.backend.entity.Rate;
 import com.cookit.backend.entity.User;
 import com.cookit.backend.response.ErrorResponse;
 import com.cookit.backend.response.UserResponse;
-import com.cookit.backend.service.UserService;
+import com.cookit.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    private final UserService userService;
+    private final FollowsService followsService;
+    private final UserLikesService userLikesService;
+    private final BookmarkService bookmarkService;
+    private final CommentService commentService;
+    private final RateService rateService;
+    private final PostService postService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService, FollowsService followsService, UserLikesService userLikesService,
+                          BookmarkService bookmarkService, CommentService commentService, RateService rateService,
+                          PostService postService) {
+        this.userService = userService;
+        this.followsService = followsService;
+        this.userLikesService = userLikesService;
+        this.bookmarkService = bookmarkService;
+        this.commentService = commentService;
+        this.rateService = rateService;
+        this.postService = postService;
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody User user) {
@@ -51,4 +70,25 @@ public class UserController {
         }
     }
 
+    @GetMapping("/get/{username}")
+    public ResponseEntity<?> getUser(@PathVariable String username) {
+        User user = userService.getUser(username);
+        if(user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsername(user.getUsername());
+        userResponse.setJoinDate(user.getJoinDate());
+        userResponse.setBio(user.getBio());
+        userResponse.setProfilePicture(user.getProfilePicture());
+        userResponse.setNumFollowers(followsService.getNumFollowers(user.getUsername()));
+        userResponse.setNumFollowing(followsService.getNumFollowing(user.getUsername()));
+        userResponse.setNumFollowers(followsService.getNumFollowers(user.getUsername()));
+        userResponse.setNumFollowing(followsService.getNumFollowing(user.getUsername()));
+        userResponse.setRates(rateService.getAllUserRates(user.getUsername()));
+        userResponse.setLikes(userLikesService.getAllLikes(user.getUsername()));
+        userResponse.setBookmarks(bookmarkService.getAllPostsUserBookmarked(user.getUsername()));
+        userResponse.setComments(commentService.getAllComments(user.getUsername()));
+        return ResponseEntity.ok(userResponse);
+    }
 }
