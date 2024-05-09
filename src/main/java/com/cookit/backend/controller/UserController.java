@@ -38,9 +38,8 @@ public class UserController {
     public ResponseEntity<?> signup(@RequestBody User user) {
         try {
             userService.registerUser(user);
-            UserResponse userResponse = new UserResponse();
-            userResponse.setUsername(user.getUsername());
-            return ResponseEntity.ok(userResponse);
+            User signedUpUser = userService.getUser(user.getUsername());
+            return ResponseEntity.ok(createResponse(signedUpUser));
         } catch (IllegalStateException e) {
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setError("UsernameAlreadyTaken");
@@ -58,9 +57,8 @@ public class UserController {
             return ResponseEntity.ok(userEntity);
         }*/
         if (userService.loginUser(user) != null) {
-            UserResponse userResponse = new UserResponse();
-            userResponse.setUsername(user.getUsername());
-            return ResponseEntity.ok(userResponse);
+            User loggedInUser = userService.getUser(user.getUsername());
+            return ResponseEntity.ok(createResponse(loggedInUser));
         }
         else {
             ErrorResponse errorResponse = new ErrorResponse();
@@ -76,6 +74,10 @@ public class UserController {
         if(user == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
+        return ResponseEntity.ok(createResponse(user));
+    }
+
+    public UserResponse createResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setUsername(user.getUsername());
         userResponse.setJoinDate(user.getJoinDate());
@@ -89,6 +91,6 @@ public class UserController {
         userResponse.setLikes(userLikesService.getAllLikes(user.getUsername()));
         userResponse.setBookmarks(bookmarkService.getAllPostsUserBookmarked(user.getUsername()));
         userResponse.setComments(commentService.getAllComments(user.getUsername()));
-        return ResponseEntity.ok(userResponse);
+        return userResponse;
     }
 }
