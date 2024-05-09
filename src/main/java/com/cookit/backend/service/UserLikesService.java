@@ -10,7 +10,7 @@ import java.util.Set;
 public interface UserLikesService {
     public void createLike(LikeDto likeDto);
     public void deleteLike(LikeDto likeDto);
-    public Set<UserLikes> getAllLikes(String username);
-    public Set<UserLikes> getPostLikes(Long postId);
+    public Set<Long> getAllLikes(String username);
+    public Set<String> getPostLikes(Long postId);
     public Long getNumLikes(Long postId);
 }

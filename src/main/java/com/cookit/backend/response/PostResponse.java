@@ -25,8 +25,8 @@ public class PostResponse {
 
     private Set<Rate> rates;
     private Set<String> photos;
-    private Set<UserLikes> likes;
-    private Set<Comment> comments;
+    private Set<String> likes; // String of usernames
+    private Set<Comment> comments; // Long of post id
 
     private Long numLikes;
     private Long numComments;

@@ -15,8 +15,8 @@ public interface UserLikesRepository extends JpaRepository<UserLikes, UserLikesI
     @Query(value = "SELECT COUNT(*) FROM user_likes l WHERE l.post_id = :postID", nativeQuery = true)
     Long getNumLikes(@Param("postID") Long postID);
 
-    @Query(value = "SELECT * FROM user_likes l WHERE l.user_id = :username", nativeQuery = true)
-    Set<UserLikes> getUserLikes(@Param("username") String username);
+    @Query(value = "SELECT l.post_id FROM user_likes l WHERE l.user_id = :username", nativeQuery = true)
+    Set<Long> getUserLikes(@Param("username") String username);
 
     @Modifying
     @Transactional
@@ -28,6 +28,6 @@ public interface UserLikesRepository extends JpaRepository<UserLikes, UserLikesI
     @Query(value = "DELETE FROM user_likes l WHERE l.user_id = :username AND l.post_id = :postID)", nativeQuery = true)
     void deleteLike(@Param("username") String username, @Param("postID") Long postID);
 
-    @Query(value = "SELECT * FROM user_likes l WHERE l.post_id = :postID", nativeQuery = true)
-    Set<UserLikes> getPostLikes(@Param("postID") Long postID);
+    @Query(value = "SELECT l.user_id FROM user_likes l WHERE l.post_id = :postID", nativeQuery = true)
+    Set<String> getPostLikes(@Param("postID") Long postID);
 }

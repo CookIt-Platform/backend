@@ -33,12 +33,12 @@ public class UserLikesServiceImpl implements UserLikesService{
     }
 
     @Override
-    public Set<UserLikes> getAllLikes(String username) {
+    public Set<Long> getAllLikes(String username) { // set of post ids
         return userLikesRepository.getUserLikes(username);
     }
 
     @Override
-    public Set<UserLikes> getPostLikes(Long postId) {
+    public Set<String> getPostLikes(Long postId) {
         return userLikesRepository.getPostLikes(postId);
     }
 

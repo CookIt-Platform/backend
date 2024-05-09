@@ -24,7 +24,7 @@ public class UserResponse {
     private Long numFollowing;
     private Set<Rate> rates;
     private Set<Post> posts;
-    private Set<UserLikes> likes;
+    private Set<Long> likes;
     private Set<Long> bookmarks;
     private Set<?> comments;
 }

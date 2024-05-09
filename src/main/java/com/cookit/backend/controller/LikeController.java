@@ -33,12 +33,12 @@ public class LikeController {
     }
 
     @GetMapping("/get/all/post/{id}")
-    public Set<UserLikes> getAllLikes(@PathVariable Long id) {
+    public Set<String> getAllLikes(@PathVariable Long id) {
         return userLikesService.getPostLikes(id);
     }
 
     @GetMapping("/get/all/user/{username}")
-    public Set<UserLikes> getAllLikes(@PathVariable String username) {
+    public Set<Long> getAllLikes(@PathVariable String username) {
         return userLikesService.getAllLikes(username);
     }
 }
