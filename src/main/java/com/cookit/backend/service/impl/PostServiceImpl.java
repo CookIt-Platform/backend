@@ -2,37 +2,25 @@ package com.cookit.backend.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
 import com.cookit.backend.dto.IngredientDto;
 import com.cookit.backend.dto.PostDto;
-import com.cookit.backend.entity.Comment;
-import com.cookit.backend.entity.ContainsIngredient;
-import com.cookit.backend.entity.ContainsIngredientId;
-import com.cookit.backend.entity.HasTag;
-import com.cookit.backend.entity.Ingredient;
-import com.cookit.backend.entity.Photo;
 import com.cookit.backend.entity.Post;
-import com.cookit.backend.entity.User;
-import com.cookit.backend.repository.BookmarkRepository;
-import com.cookit.backend.repository.CommentRepository;
 import com.cookit.backend.repository.ContainsIngredientRepository;
 import com.cookit.backend.repository.HasTagRepository;
 import com.cookit.backend.repository.IngredientRepository;
 import com.cookit.backend.repository.PhotoRepository;
 import com.cookit.backend.repository.PostRepository;
-import com.cookit.backend.repository.RateRepository;
 import com.cookit.backend.repository.TagRepository;
-import com.cookit.backend.repository.UserLikesRepository;
-import com.cookit.backend.repository.UserRepository;
 import com.cookit.backend.response.PostResponse;
+import com.cookit.backend.service.ContainsIngredientService;
 import com.cookit.backend.service.PostService;
+import com.cookit.backend.service.HasTagService;
+import com.cookit.backend.service.PhotoService;
 
 import jakarta.transaction.Transactional;
-import com.cookit.backend.entity.Tag;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -42,25 +30,21 @@ public class PostServiceImpl implements PostService{
     private HasTagRepository hasTagRepository;
     private TagRepository tagRepository;
     private PhotoRepository photoRepository;
-    private UserRepository userRepository;
-    private RateRepository rateRepository;
-    private UserLikesRepository likeRepository;
-    private BookmarkRepository bookmarkRepository;
-    private CommentRepository commentRepository;
+    private PhotoService photoService;
+    private HasTagService hasTagService;
     private IngredientRepository ingredientRepository;
+    private ContainsIngredientService containsIngredientService;
 
-    public PostServiceImpl(PostRepository postRepository, ContainsIngredientRepository containsIngredientRepository, HasTagRepository hasTagRepository, TagRepository tagRepository, PhotoRepository photoRepository, UserRepository userRepository, RateRepository rateRepository, UserLikesRepository likeRepository, BookmarkRepository bookmarkRepository, CommentRepository commentRepository, IngredientRepository ingredientRepository) {
+    public PostServiceImpl(PostRepository postRepository, PhotoService photoService, ContainsIngredientRepository containsIngredientRepository, HasTagRepository hasTagRepository, TagRepository tagRepository, PhotoRepository photoRepository, HasTagService hasTagService, IngredientRepository ingredientRepository, ContainsIngredientService containsIngredientService) {
         this.postRepository = postRepository;
         this.containsIngredientRepository = containsIngredientRepository;
         this.hasTagRepository = hasTagRepository;
         this.tagRepository = tagRepository;
         this.photoRepository = photoRepository;
-        this.userRepository = userRepository;
-        this.rateRepository = rateRepository;
-        this.likeRepository = likeRepository;
-        this.bookmarkRepository = bookmarkRepository;
-        this.commentRepository = commentRepository;
+        this.photoService = photoService;
+        this.hasTagService = hasTagService;
         this.ingredientRepository = ingredientRepository;
+        this.containsIngredientService = containsIngredientService;
     }
 
     /**
@@ -136,39 +120,10 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> getPostsByTagList(List<String> tags) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Post> getPostsByTag(String tag) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<PostResponse> getPostsByUser(String username) {
         return createPostResponses(postRepository.getUserPosts(username));
     }
 
-    @Override
-    public List<Post> getPostsByName(String name) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Post> getPostsByIngredient(String ingredient) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Post> getPostsByIngredientList(List<String> ingredients) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public List<PostResponse> getPostsByUserAndDifficulty(String username, String difficulty) {
@@ -205,8 +160,41 @@ public class PostServiceImpl implements PostService{
         postResponse.setDifficulty(post.getDifficulty());
         postResponse.setTime(post.getTime());
         postResponse.setAuthor(post.getAuthor().getUsername());
+        postResponse.setHasTags(hasTagService.getTagsOfPost(post.getId()));
+        postResponse.setContainsIngredients(containsIngredientService.getPostIngredients(post.getId()));
+        postResponse.setPhotos(photoService.getAllPhotos(post.getId()));
 
         return postResponse;
+    }
+
+    @Override
+    public List<Post> getPostsByName(String name) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPostsByName'");
+    }
+
+    @Override
+    public List<Post> getPostsByIngredient(String ingredient) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPostsByIngredient'");
+    }
+
+    @Override
+    public List<Post> getPostsByIngredientList(List<String> ingredients) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPostsByIngredientList'");
+    }
+
+    @Override
+    public List<Post> getPostsByTagList(List<String> tags) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPostsByTagList'");
+    }
+
+    @Override
+    public List<Post> getPostsByTag(String tag) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPostsByTag'");
     }
     
 
