@@ -71,62 +71,40 @@ public class PostServiceImpl implements PostService{
     @Transactional
     @Override
     public Post createPost(PostDto postDto) {
-        User user = userRepository.findByUsernameCaseInsensitive(postDto.getAuthor());
-        Post post = new Post();
-        post.setName(postDto.getName());
-        post.setPublishDate(postDto.getPublishDate());
-        post.setShortDescription(postDto.getShortDescription());
-        post.setSteps(postDto.getSteps());
-        post.setDifficulty(postDto.getDifficulty());
-        post.setTime(postDto.getTime());
-        post.setAuthor(user);
-        postRepository.save(post);
+        //User user = userRepository.findByUsernameCaseInsensitive(postDto.getAuthor());
+
+        postRepository.createPost(postDto.getDifficulty(), postDto.getName(), 
+                                    postDto.getPublishDate(), postDto.getShortDescription(), 
+                                    postDto.getSteps(), postDto.getTime(), postDto.getAuthor());
+        Post post = postRepository.getLastPost();
         
-        user.getPosts().add(post);
         if(postDto.getIngredients() != null) {
             for(IngredientDto ingredientDto : postDto.getIngredients()) {
-                Ingredient ingredient = ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName().toLowerCase());
-                if(ingredient == null) {
-                    ingredient = new Ingredient();
-                    ingredient.setIngredientName(ingredientDto.getName().toLowerCase());
-                    ingredientRepository.save(ingredient);
+                if(ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName()) == null) {
+                    ingredientRepository.createIngredient(ingredientDto.getName().toLowerCase());
                 }
-                  
-                    
-                    Optional<ContainsIngredient> existingContainsIngredient = containsIngredientRepository.findById(new ContainsIngredientId(post.getId(), ingredient.getIngredientName()));
-                    if(!existingContainsIngredient.isPresent()) {
-                        ContainsIngredient containsIngredient = new ContainsIngredient(post, ingredient, ingredientDto.getQuantity(), ingredientDto.getUnit());
-                        //containsIngredientRepository.save(containsIngredient);
-                        ingredient.getContainsIngredients().add(containsIngredient);
-                        post.getContainsIngredients().add(containsIngredient); 
-                    }
+                containsIngredientRepository.createContainsIngredient(ingredientDto.getName(), post.getId(), ingredientDto.getQuantity(), ingredientDto.getUnit().toString());  
             }
         }
 
         if(postDto.getTags() != null) {
             for(String tagName : postDto.getTags()) {
-                Tag tag = tagRepository.findByNameCaseInsensitive(tagName);
-                if(tag == null) {
-                    tag = new Tag();
-                    tag.setTagName(tagName);
-                    tagRepository.save(tag);
+                if(tagRepository.findByNameCaseInsensitive(tagName) == null) {
+                    tagRepository.createTag(tagName);
                 }
-                HasTag hasTag = new HasTag(post, tag);
-                //hasTagRepository.save(hasTag);
-                post.getHasTags().add(hasTag);
-                tag.getHasTags().add(hasTag);
+
+                hasTagRepository.createHasTag(post.getId(), tagName);
+
             }
         }
 
         if(postDto.getPhotos() != null) {
             for(String photo : postDto.getPhotos()) {
-                Photo photoEntity = new Photo(post, photo);
-                //photoRepository.save(photoEntity);
-                post.getPhotos().add(photoEntity);
+                photoRepository.createPhoto(photo, post.getId());
             }
         }
 
-       return post;
+       return postRepository.getPost(post.getId());
     }
 
     @Override
@@ -141,7 +119,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Post getPost(Long id) {
-        return postRepository.findById(id).orElse(null);
+        return postRepository.getPost(id);
     }
 
     @Override
@@ -195,5 +173,30 @@ public class PostServiceImpl implements PostService{
     public List<Post> getPostsByUserAndDifficulty(String username, String difficulty) {
         return postRepository.getPostsByDifficultyAndUser(difficulty, username);
     }
+/* 
+    @Override
+    public List<Post> getPostsByIds(Long[] ids) {
+        return postRepository.getPostsByIds(ids);
+    }
+    */
+
+    @Override
+    public List<Post> getPostsByIds(Long[] ids) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Post> getTopLikedPosts(Integer num) {
+        return postRepository.getTopLikedPosts(num);
+    }
+
+    @Override
+    public List<Post> getRecentPosts(Integer num) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRecentPosts'");
+    }
+
+    
 
 }
