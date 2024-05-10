@@ -18,6 +18,9 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query(value = "SELECT * FROM post p WHERE p.author = :username", nativeQuery = true)
     List<Post> getUserPosts(@Param("username") String username);
 
+    @Query(value = "SELECT * FROM post p", nativeQuery = true)
+    List<Post> getAllPosts();
+
     @Query(value = "SELECT * FROM post p WHERE p.difficulty = :difficulty", nativeQuery = true)
     List<Post> getPostsByDifficulty(@Param("difficulty") String difficulty);
 
@@ -38,7 +41,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
                     @Param("description") String description, @Param("steps") String steps, @Param("time") Integer time,
                     @Param("author") String author);
 
-    @Query(value = "SELECT * FROM post p WHERE p.id IN (SELECT u.post_id FROM user_likes u GROUP BY u.post_id ORDER BY COUNT(*) DESC LIMIT :num)", nativeQuery = true)
+    @Query(value = "SELECT * FROM post p JOIN ( SELECT u.post_id, COUNT(*) as likes FROM user_likes u GROUP BY u.post_id ORDER BY likes DESC LIMIT :num) t ON p.id = t.post_id ORDER BY t.likes DESC", nativeQuery = true)
     List<Post> getTopLikedPosts(@Param("num") Integer num);
 
     @Query(value = "SELECT * FROM post p ORDER BY p.publish_date DESC LIMIT :num", nativeQuery = true)

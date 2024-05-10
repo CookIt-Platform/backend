@@ -1,5 +1,6 @@
 package com.cookit.backend.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -27,6 +28,7 @@ import com.cookit.backend.repository.RateRepository;
 import com.cookit.backend.repository.TagRepository;
 import com.cookit.backend.repository.UserLikesRepository;
 import com.cookit.backend.repository.UserRepository;
+import com.cookit.backend.response.PostResponse;
 import com.cookit.backend.service.PostService;
 
 import jakarta.transaction.Transactional;
@@ -123,15 +125,14 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        System.out.println(postRepository.findAll());
-        return postRepository.findAll();
+    public List<PostResponse> getAllPosts() {
+        return createPostResponses(postRepository.getAllPosts());
     }
 
     @Override
-    public List<Post> getPostsByDifficulty(String difficulty) {
+    public List<PostResponse> getPostsByDifficulty(String difficulty) {
         
-        return postRepository.getPostsByDifficulty(difficulty);
+        return createPostResponses(postRepository.getPostsByDifficulty(difficulty));
     }
 
     @Override
@@ -147,8 +148,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> getPostsByUser(String username) {
-        return postRepository.getUserPosts(username);
+    public List<PostResponse> getPostsByUser(String username) {
+        return createPostResponses(postRepository.getUserPosts(username));
     }
 
     @Override
@@ -170,33 +171,44 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> getPostsByUserAndDifficulty(String username, String difficulty) {
-        return postRepository.getPostsByDifficultyAndUser(difficulty, username);
+    public List<PostResponse> getPostsByUserAndDifficulty(String username, String difficulty) {
+        return createPostResponses(postRepository.getPostsByDifficultyAndUser(difficulty, username));
     }
-/* 
-    @Override
-    public List<Post> getPostsByIds(Long[] ids) {
-        return postRepository.getPostsByIds(ids);
-    }
-    */
+  
 
     @Override
-    public List<Post> getPostsByIds(Long[] ids) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<PostResponse> getTopLikedPosts(Integer num) {
+        return createPostResponses(postRepository.getTopLikedPosts(num));
     }
 
     @Override
-    public List<Post> getTopLikedPosts(Integer num) {
-        return postRepository.getTopLikedPosts(num);
-    }
-
-    @Override
-    public List<Post> getRecentPosts(Integer num) {
+    public List<PostResponse> getRecentPosts(Integer num) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getRecentPosts'");
     }
 
+
+    public List<PostResponse> createPostResponses(List<Post> posts) {
+        List<PostResponse> postResponses = new ArrayList<>();
+        for(Post post : posts) {
+            postResponses.add(createResponse(post));
+        }
+        return postResponses;
+    }
+
+    public PostResponse createResponse(Post post) {
+        PostResponse postResponse = new PostResponse();
+        postResponse.setId(post.getId());
+        postResponse.setName(post.getName());
+        postResponse.setPublishDate(post.getPublishDate());
+        postResponse.setShortDescription(post.getShortDescription());
+        postResponse.setSteps(post.getSteps());
+        postResponse.setDifficulty(post.getDifficulty());
+        postResponse.setTime(post.getTime());
+        postResponse.setAuthor(post.getAuthor().getUsername());
+
+        return postResponse;
+    }
     
 
 }

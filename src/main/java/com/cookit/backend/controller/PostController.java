@@ -74,9 +74,18 @@ public class PostController {
         return ResponseEntity.ok(createResponse(post));
     }
 
+    @GetMapping("/get/top/{num}")
+    public ResponseEntity<?> getTopLikedPosts(@PathVariable Integer num) {
+        List<PostResponse> posts = postService.getTopLikedPosts(num);
+        if(posts == null || posts.isEmpty()) {
+            return ResponseEntity.badRequest().body("No posts found");
+        }
+        return ResponseEntity.ok(posts);
+    }
+
     @GetMapping("/get/all")
     public ResponseEntity<?> getPosts(@RequestParam(required = false) String username, @RequestParam(required = false) String difficulty) {
-        List<Post> posts;
+        List<PostResponse> posts;
 
         if (username != null && difficulty != null) {
             posts = postService.getPostsByUserAndDifficulty(username, difficulty);
@@ -92,11 +101,7 @@ public class PostController {
             return ResponseEntity.badRequest().body("No posts found for the given criteria");
         }
 
-        PostResponse[] postResponses = new PostResponse[posts.size()];
-        for(int i = 0; i < posts.size(); i++) {
-            postResponses[i] = createResponse(posts.get(i));
-        }
-        return ResponseEntity.ok(postResponses);
+        return ResponseEntity.ok(posts);
     }
 
 
@@ -110,15 +115,7 @@ public class PostController {
         postResponse.setDifficulty(post.getDifficulty());
         postResponse.setTime(post.getTime());
         postResponse.setAuthor(post.getAuthor().getUsername());
-        postResponse.setLikes(userLikesService.getPostLikes(post.getId()));
-        postResponse.setComments(commentService.getPostComments(post.getId()));
-        postResponse.setNumLikes(userLikesService.getNumLikes(post.getId()));
-        postResponse.setNumComments(commentService.getNumComments(post.getId()));
-        postResponse.setNumBookmarks(bookmarkService.getNumBookmarks(post.getId()));
-        postResponse.setRates(rateService.getAllPostRates(post.getId()));
-        postResponse.setAverageRating(rateService.getAverageRating(post.getId()));
-        postResponse.setPhotos(photoService.getAllPhotos(post.getId()));
-        postResponse.setHasTags(hasTagService.getTagsOfPost(post.getId()));
+
         return postResponse;
     }
 }
