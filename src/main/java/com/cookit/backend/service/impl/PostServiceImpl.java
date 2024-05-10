@@ -3,6 +3,8 @@ package com.cookit.backend.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cookit.backend.entity.UserLikes;
+import com.cookit.backend.service.*;
 import org.springframework.stereotype.Service;
 
 import com.cookit.backend.dto.IngredientDto;
@@ -15,10 +17,6 @@ import com.cookit.backend.repository.PhotoRepository;
 import com.cookit.backend.repository.PostRepository;
 import com.cookit.backend.repository.TagRepository;
 import com.cookit.backend.response.PostResponse;
-import com.cookit.backend.service.ContainsIngredientService;
-import com.cookit.backend.service.PostService;
-import com.cookit.backend.service.HasTagService;
-import com.cookit.backend.service.PhotoService;
 
 import jakarta.transaction.Transactional;
 
@@ -34,8 +32,15 @@ public class PostServiceImpl implements PostService{
     private HasTagService hasTagService;
     private IngredientRepository ingredientRepository;
     private ContainsIngredientService containsIngredientService;
+    private CommentService commentService;
+    private UserLikesService userLikesService;
+    private BookmarkService bookmarkService;
+    private RateService rateService;
 
-    public PostServiceImpl(PostRepository postRepository, PhotoService photoService, ContainsIngredientRepository containsIngredientRepository, HasTagRepository hasTagRepository, TagRepository tagRepository, PhotoRepository photoRepository, HasTagService hasTagService, IngredientRepository ingredientRepository, ContainsIngredientService containsIngredientService) {
+    public PostServiceImpl(PostRepository postRepository, PhotoService photoService, ContainsIngredientRepository containsIngredientRepository,
+                           HasTagRepository hasTagRepository, TagRepository tagRepository, PhotoRepository photoRepository,
+                           HasTagService hasTagService, IngredientRepository ingredientRepository, ContainsIngredientService containsIngredientService,
+                           CommentService commentService, UserLikesService userLikesService, BookmarkService bookmarkService, RateService rateService) {
         this.postRepository = postRepository;
         this.containsIngredientRepository = containsIngredientRepository;
         this.hasTagRepository = hasTagRepository;
@@ -45,6 +50,10 @@ public class PostServiceImpl implements PostService{
         this.hasTagService = hasTagService;
         this.ingredientRepository = ingredientRepository;
         this.containsIngredientService = containsIngredientService;
+        this.commentService = commentService;
+        this.userLikesService = userLikesService;
+        this.bookmarkService = bookmarkService;
+        this.rateService = rateService;
     }
 
     /**
@@ -163,7 +172,10 @@ public class PostServiceImpl implements PostService{
         postResponse.setHasTags(hasTagService.getTagsOfPost(post.getId()));
         postResponse.setContainsIngredients(containsIngredientService.getPostIngredients(post.getId()));
         postResponse.setPhotos(photoService.getAllPhotos(post.getId()));
-
+        postResponse.setNumLikes(userLikesService.getNumLikes(post.getId()));
+        postResponse.setComments(commentService.getPostComments(post.getId()));
+        postResponse.setNumBookmarks(bookmarkService.getNumBookmarks(post.getId()));
+        postResponse.setNumComments(commentService.getNumComments(post.getId()));
         return postResponse;
     }
 
