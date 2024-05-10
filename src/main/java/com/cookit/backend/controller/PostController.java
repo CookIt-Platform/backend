@@ -67,16 +67,25 @@ public class PostController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getPost(@PathVariable Long id) {
-        Post post = postService.getPost(id);
+        PostResponse post = postService.getPost(id);
         if(post == null) {
             return ResponseEntity.badRequest().body("Post not found");
         }
-        return ResponseEntity.ok(createResponse(post));
+        return ResponseEntity.ok(post);
     }
 
     @GetMapping("/get/top/{num}")
     public ResponseEntity<?> getTopLikedPosts(@PathVariable Integer num) {
         List<PostResponse> posts = postService.getTopLikedPosts(num);
+        if(posts == null || posts.isEmpty()) {
+            return ResponseEntity.badRequest().body("No posts found");
+        }
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/get/recent/{num}")
+    public ResponseEntity<?> getRecentPosts(@PathVariable Integer num) {
+        List<PostResponse> posts = postService.getRecentPosts(num);
         if(posts == null || posts.isEmpty()) {
             return ResponseEntity.badRequest().body("No posts found");
         }
@@ -102,20 +111,5 @@ public class PostController {
         }
 
         return ResponseEntity.ok(posts);
-    }
-
-
-    public PostResponse createResponse(Post post) {
-        PostResponse postResponse = new PostResponse();
-        postResponse.setId(post.getId());
-        postResponse.setName(post.getName());
-        postResponse.setPublishDate(post.getPublishDate());
-        postResponse.setShortDescription(post.getShortDescription());
-        postResponse.setSteps(post.getSteps());
-        postResponse.setDifficulty(post.getDifficulty());
-        postResponse.setTime(post.getTime());
-        postResponse.setAuthor(post.getAuthor().getUsername());
-
-        return postResponse;
     }
 }

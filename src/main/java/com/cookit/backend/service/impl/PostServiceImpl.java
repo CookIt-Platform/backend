@@ -120,8 +120,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Post getPost(Long id) {
-        return postRepository.getPost(id);
+    public PostResponse getPost(Long id) {
+        return createResponse(postRepository.getPost(id));
     }
 
     @Override
@@ -183,8 +183,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostResponse> getRecentPosts(Integer num) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRecentPosts'");
+        return createPostResponses(postRepository.getRecentPosts(num));
     }
 
 
