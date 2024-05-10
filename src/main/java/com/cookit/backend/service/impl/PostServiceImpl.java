@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.cookit.backend.entity.UserLikes;
 import com.cookit.backend.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import com.cookit.backend.dto.IngredientDto;
@@ -36,6 +38,7 @@ public class PostServiceImpl implements PostService{
     private UserLikesService userLikesService;
     private BookmarkService bookmarkService;
     private RateService rateService;
+    @Autowired
 
     public PostServiceImpl(PostRepository postRepository, PhotoService photoService, ContainsIngredientRepository containsIngredientRepository,
                            HasTagRepository hasTagRepository, TagRepository tagRepository, PhotoRepository photoRepository,
@@ -63,7 +66,6 @@ public class PostServiceImpl implements PostService{
      * @param postDto
      * @return Post
      */
-    @Transactional
     @Override
     public Post createPost(PostDto postDto) {
         //User user = userRepository.findByUsernameCaseInsensitive(postDto.getAuthor());
@@ -71,14 +73,14 @@ public class PostServiceImpl implements PostService{
         postRepository.createPost(postDto.getDifficulty(), postDto.getName(), 
                                     postDto.getPublishDate(), postDto.getShortDescription(), 
                                     postDto.getSteps(), postDto.getTime(), postDto.getAuthor());
-        Post post = postRepository.getLastPost();
+        Long id = postRepository.getLastPost();
         
         if(postDto.getIngredients() != null) {
             for(IngredientDto ingredientDto : postDto.getIngredients()) {
-                if(ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName()) == null) {
-                    ingredientRepository.createIngredient(ingredientDto.getName().toLowerCase());
+                if (ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName()) == null) {
+                    ingredientRepository.createIngredient(ingredientDto.getName());
                 }
-                containsIngredientRepository.createContainsIngredient(ingredientDto.getName(), post.getId(), ingredientDto.getQuantity(), ingredientDto.getUnit().toString());  
+                containsIngredientRepository.createContainsIngredient(ingredientDto.getName(), id, ingredientDto.getQuantity(), ingredientDto.getUnit().toString());
             }
         }
 
@@ -88,18 +90,18 @@ public class PostServiceImpl implements PostService{
                     tagRepository.createTag(tagName);
                 }
 
-                hasTagRepository.createHasTag(post.getId(), tagName);
+                hasTagRepository.createHasTag(id, tagName);
 
             }
         }
 
         if(postDto.getPhotos() != null) {
             for(String photo : postDto.getPhotos()) {
-                photoRepository.createPhoto(photo, post.getId());
+                photoRepository.createPhoto(photo, id);
             }
         }
 
-       return postRepository.getPost(post.getId());
+       return postRepository.getPost(id);
     }
 
     @Override
