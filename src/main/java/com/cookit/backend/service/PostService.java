@@ -23,4 +23,5 @@ public interface PostService {
     public List<Post> getPostsByName(String name);
     public List<Post> getPostsByIngredient(String ingredient);
     public List<Post> getPostsByIngredientList(List<String> ingredients);
+    public List<PostResponse> findPostsByKeyword(String keyword);
 }

@@ -47,4 +47,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query(value = "SELECT * FROM post p ORDER BY p.publish_date DESC LIMIT :num", nativeQuery = true)
     List<Post> getRecentPosts(@Param("num") Integer num);
 
+    @Query(value = "SELECT * FROM post p WHERE p.name LIKE CONCAT('%', :keyword, '%')", nativeQuery = true)
+    List<Post> findPostsByKeyword(@Param("keyword") String keyword);
+
 }
