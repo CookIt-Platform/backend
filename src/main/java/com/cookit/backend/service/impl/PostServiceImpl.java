@@ -196,6 +196,12 @@ public class PostServiceImpl implements PostService{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPostsByTag'");
     }
-    
+
+    @Override
+    public List<PostResponse> findPostsByKeyword(String keyword) {
+        return createPostResponses(postRepository.findPostsByKeyword(keyword));
+    }
+
+
 
 }
