@@ -1,7 +1,10 @@
 package com.cookit.backend.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
+import com.cookit.backend.dto.IngredientDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cookit.backend.entity.Ingredient;
@@ -11,15 +14,16 @@ import com.cookit.backend.service.IngredientService;
 @Service
 public class IngredientServiceImpl implements IngredientService{
 
-    private IngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepository;
 
+    @Autowired
     public IngredientServiceImpl(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
     }
 
     @Override
-    public List<Ingredient> getAllIngredients() {
-        return ingredientRepository.findAll();
+    public Set<String> getAllIngredients() {
+        return ingredientRepository.getAllIngredients();
     }
 
     @Override
@@ -28,18 +32,19 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
-    public void createIngredient(Ingredient ingredient) {
-        ingredientRepository.save(ingredient);
+    public void createIngredient(IngredientDto ingredientDto) {
+        if (ingredientRepository.findByNameCaseInsensitive(ingredientDto.getName()) == null)
+            ingredientRepository.createIngredient(ingredientDto.getName());
     }
 
     @Override
-    public void updateIngredient(Ingredient ingredient) {
-        ingredientRepository.save(ingredient);
+    public void updateIngredient(String newName, String oldName) {
+        ingredientRepository.updateIngredient(newName, oldName);
     }
 
     @Override
     public void deleteIngredient(String name) {
-        ingredientRepository.deleteById(name);
+        ingredientRepository.deleteIngredient(name);
     }
 
 }

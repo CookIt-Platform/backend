@@ -1,6 +1,7 @@
 package com.cookit.backend.response;
 
 import com.cookit.backend.dto.CommentDto;
+import com.cookit.backend.dto.IngredientDto;
 import com.cookit.backend.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,5 +36,5 @@ public class PostResponse {
     private Double averageRating;
 
     private Set<String> hasTags;
-    private Set<ContainsIngredient> containsIngredients;
+    private Set<IngredientDto> containsIngredients;
 }
