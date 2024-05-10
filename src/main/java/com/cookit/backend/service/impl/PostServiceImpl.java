@@ -176,6 +176,7 @@ public class PostServiceImpl implements PostService{
         postResponse.setComments(commentService.getPostComments(post.getId()));
         postResponse.setNumBookmarks(bookmarkService.getNumBookmarks(post.getId()));
         postResponse.setNumComments(commentService.getNumComments(post.getId()));
+        postResponse.setAverageRating(rateService.getAverageRating(post.getId()));
         return postResponse;
     }
 
