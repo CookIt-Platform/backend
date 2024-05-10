@@ -11,7 +11,7 @@ public interface PostService {
     public Post createPost(PostDto post);
     public void updatePost(Post post);
     public void deletePost(Long id);
-    public Post getPost(Long id);
+    public PostResponse getPost(Long id);
     public List<PostResponse> getAllPosts();
     public List<PostResponse> getTopLikedPosts(Integer num);
     public List<PostResponse> getRecentPosts(Integer num);
@@ -23,4 +23,5 @@ public interface PostService {
     public List<Post> getPostsByName(String name);
     public List<Post> getPostsByIngredient(String ingredient);
     public List<Post> getPostsByIngredientList(List<String> ingredients);
+    public List<PostResponse> findPostsByKeyword(String keyword);
 }
