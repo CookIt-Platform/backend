@@ -30,8 +30,8 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     @Query(value = "SELECT * FROM post p WHERE p.id =:id", nativeQuery = true)
     Post getPost(Long id);
 
-    @Query(value = "SELECT * FROM post p ORDER BY p.id DESC LIMIT 1", nativeQuery = true)
-    Post getLastPost();
+    @Query(value = "SELECT p.id FROM post p ORDER BY p.id DESC LIMIT 1", nativeQuery = true)
+    Long getLastPost();
 
     @Modifying
     @Transactional

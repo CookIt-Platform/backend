@@ -5,12 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +23,7 @@ public class Ingredient {
     @Column(name = "ingredient_name", length = 256)
     private String ingredientName;
 
-    @OneToMany(mappedBy = "ingredientName", fetch = FetchType.EAGER)
+    @ManyToMany
     @JsonBackReference
     private Set<ContainsIngredient> containsIngredients = new HashSet<>();
 
