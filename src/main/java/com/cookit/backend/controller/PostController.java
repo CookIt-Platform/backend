@@ -24,24 +24,10 @@ import com.cookit.backend.entity.Post;
 public class PostController {
 
     private final PostService postService;
-    private final UserLikesService userLikesService;
-    private final CommentService commentService;
-    private final BookmarkService bookmarkService;
-    private final RateService rateService;
-    private final PhotoService photoService;
-    private final HasTagService hasTagService;
 
     @Autowired
-    public PostController(PostService postService, UserLikesService userLikesService, CommentService commentService,
-                          BookmarkService bookmarkService, RateService rateService, PhotoService photoService,
-                          HasTagService hasTagService) {
+    public PostController(PostService postService) {
         this.postService = postService;
-        this.userLikesService = userLikesService;
-        this.commentService = commentService;
-        this.bookmarkService = bookmarkService;
-        this.rateService = rateService;
-        this.photoService = photoService;
-        this.hasTagService = hasTagService;
     }
 
     @PostMapping("/create")
