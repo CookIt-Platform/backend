@@ -1,6 +1,6 @@
 # CookIt Platform Backend
 
-This repository contains the backend service for the CookIt Platform—a web application for sharing, discovering, and managing recipes and related social features. The backend is built with Spring Boot, Java, and MySQL, and provides a rich RESTful API.
+This repository contains the backend service for the CookIt Platform—a web application for sharing, discovering, and managing recipes and related social features. The backend is built with Spring Boot, Java, and MySQL, and provides a rich REST API.
 
 ---
 
