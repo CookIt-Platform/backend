@@ -56,43 +56,74 @@ The backend uses MySQL as its primary data store, with a normalized relational s
 
 ## API Overview
 
-The backend exposes a RESTful API, structured around the following modules (selected highlights shown):
+The backend exposes a REST API, structured around the following modules (selected highlights shown):
 
 ### User & Social
 
-- **Follow users**
-  - `POST /follow/create` — Follow another user
-  - `DELETE /follow/delete` — Unfollow
-  - `GET /follow/get/num/followers/{username}` — Follower count
-  - `GET /follow/get/followers/{username}` — List followers
+- **User**
+  - `POST   /user/signup` — Register a new user
+  - `POST   /user/login` — Login
+  - `GET    /user/get/{username}` — Get user profile
+  
+- **Follow**
+  - `POST   /follow/create` — Follow a user
+  - `DELETE /follow/delete` — Unfollow a user
+  - `GET    /follow/get/num/followers/{username}` — Number of followers for user
+  - `GET    /follow/get/num/following/{username}` — Number of users followed by user
+  - `GET    /follow/get/followers/{username}` — List of followers
+  - `GET    /follow/get/following/{username}` — List of users followed
+
+- **Like**
+  - `POST   /like/create` — Like a post
+  - `DELETE /like/delete` — Unlike a post
+  - `GET    /like/get/all/post/{id}` — Get all users who liked a post
+  - `GET    /like/get/all/user/{username}` — Get all liked posts by user
+
+### Recipes & Content
+
+- **Post**
+  - `POST   /post/create` — Create a new post (recipe)
+  - `POST   /post/update` — Update a post
+  - `DELETE /post/delete/{id}` — Delete a post by ID
+  - `GET    /post/get/{id}` — Get a post by ID
+  - `GET    /post/get/top/{num}` — Get top liked posts
+  - `GET    /post/get/recent/{num}` — Get most recent posts
+  - `GET    /post/get/all` — Get all posts (optional params: `username`, `difficulty`)
+  - `GET    /post/search/posts/{keyword}` — Search posts by keyword
 
 - **Bookmark recipes**
   - `POST /bookmark/create` — Add bookmark
   - `DELETE /bookmark/delete` — Remove bookmark
+    
+- **Tag**
+  - `POST /tag/create` — Create a tag
+  - `DELETE /tag/delete` — Delete a tag
 
-### Recipes & Content
+- **HasTag**
+  - `POST   /hastag/create` — Add a tag to a post
+  - `DELETE /hastag/delete` — Remove a tag from a post
+  - `GET    /hastag/get/posts/with/tag/{tagName}` — Get posts with a specific tag
+  - `GET    /hastag/get/post/tags/{id}` — Get all tags for a post
 
-- **Tags**
-  - `POST /tag/create` — Add a tag
-  - `DELETE /tag/delete` — Remove a tag
+- **ContainsIngredient**
+- `POST   /containsingredient/create` — Add ingredient to post
+- `DELETE /containsingredient/delete` — Remove ingredient from post
+- `GET    /containsingredient/get/ingredients/post/{id}` — Get ingredients for a post
 
-- **Ingredients**
-  - `POST /ingredient/create` — Add ingredient
-  - `DELETE /ingredient/delete` — Remove ingredient
-  - `GET /ingredient/all` — List all ingredients
+- **Rate**
+  - `POST   /rate/create` — Add a rating for a post
+  - `DELETE /rate/delete` — Remove a rating
+  - `POST   /rate/update` — Update a rating
+  - `GET    /rate/get/all/post/{id}` — All ratings for a post
+  - `GET    /rate/get/all/user/{username}` — All ratings by a user
+  - `GET    /rate/get/post/averagerating/{id}` — Average rating for a post
 
-- **Ratings**
-  - `POST /rate/create` — Rate a recipe
-  - `PUT /rate/update` — Update a rating
-  - `DELETE /rate/delete` — Remove your rating
-  - `GET /rate/average/{postId}` — Average rating for a recipe
-
-- **Comments**
-  - `POST /comment/create` — Add a comment
-  - `DELETE /comment/delete` — Remove a comment
-  - `PUT /comment/update` — Edit comment
-  - `GET /comment/user/{username}` — Comments by user
-  - `GET /comment/post/{postId}` — Comments on a recipe
+- **Comment**
+  - `POST   /comment/create` — Add a comment
+  - `DELETE /comment/delete` — Delete a comment
+  - `GET    /comment/get/all/post/{id}` — Get all comments for a post
+  - `GET    /comment/get/all/user/{username}` — Get all comments by a user
+  - `GET    /comment/get/num/post/comments/{id}` — Get number of comments for a post
 
 > **For a full API reference, see:**  
 > - [API Endpoints Document](Project%20Documents/endpoints.docx)  
@@ -112,8 +143,8 @@ The backend exposes a RESTful API, structured around the following modules (sele
 
 1. Use the provided scripts to set up the schema and seed data:
    ```bash
-   mysql -u <user> -p < Project\ Documents/cookit-createdb.sql
-   mysql -u <user> -p < Project\ Documents/cookit-insert.sql
+   mysql -u <user> -p < "Project Documents/cookit-createdb.sql"
+   mysql -u <user> -p < "Project Documents/cookit-insert.sql"
    ```
 
 2. Update `src/main/resources/application.properties` with your own MySQL connection info:
@@ -163,7 +194,6 @@ backend/
 
 - Run tests: `mvn test`
 - API can be tested using Postman, curl, or any REST client
-- Contributions welcome: Fork, branch, PR
 
 ---
 
